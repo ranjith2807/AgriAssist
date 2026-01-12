@@ -1,0 +1,332 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return request.auth.uid == userId;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'ADMIN';
+    }
+    
+    function isExpert() {
+      return isAuthenticated() && 
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'EXPERT';
+    }
+    
+    function isFarmer() {
+      return isAuthenticated() && 
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'FARMER';
+    }
+    
+    function isOwnerOrAdmin(userId) {
+      return isOwner(userId) || isAdmin();
+    }
+
+    // Users collection
+    match /users/{userId} {
+      allow read: if isOwnerOrAdmin(userId) || isExpert();
+      allow create: if isAuthenticated() && isOwner(userId);
+      allow update: if isOwnerOrAdmin(userId);
+      allow delete: if isAdmin();
+    }
+
+    // Expert Profiles collection
+    match /expertProfiles/{profileId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isOwner(resource.data.userId);
+      allow update: if isOwnerOrAdmin(resource.data.userId);
+      allow delete: if isAdmin();
+    }
+
+    // Farms collection
+    match /farms/{farmId} {
+      allow read, write: if isOwnerOrAdmin(resource.data.userId);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.userId);
+    }
+
+    // Farm Fields collection
+    match /farmFields/{fieldId} {
+      allow read, write: if isAuthenticated() && (
+        isOwner(get(/databases/$(database)/documents/farms/$(resource.data.farmId)).data.userId) ||
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && 
+        isOwner(get(/databases/$(database)/documents/farms/$(request.resource.data.farmId)).data.userId);
+    }
+
+    // Crop Varieties collection (public read, admin write)
+    match /cropVarieties/{varietyId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Crop Health collection
+    match /cropHealth/{healthId} {
+      allow read, write: if isAuthenticated() && (
+        isOwner(get(/databases/$(database)/documents/farms/$(get(/databases/$(database)/documents/farmFields/$(resource.data.fieldId)).data.farmId)).data.userId) ||
+        isAdmin() ||
+        isExpert()
+      );
+    }
+
+    // Harvests collection
+    match /harvests/{harvestId} {
+      allow read, write: if isAuthenticated() && (
+        isOwner(get(/databases/$(database)/documents/farms/$(get(/databases/$(database)/documents/farmFields/$(resource.data.fieldId)).data.farmId)).data.userId) ||
+        isAdmin()
+      );
+    }
+
+    // Soil Analysis collection
+    match /soilAnalysis/{analysisId} {
+      allow read, write: if isAuthenticated() && (
+        isOwner(get(/databases/$(database)/documents/farms/$(get(/databases/$(database)/documents/farmFields/$(resource.data.fieldId)).data.farmId)).data.userId) ||
+        isAdmin() ||
+        isExpert()
+      );
+    }
+
+    // Weather Data collection
+    match /weatherData/{weatherId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin(); // Only admin can write weather data
+    }
+
+    // Weather Alerts collection
+    match /weatherAlerts/{alertId} {
+      allow read, write: if isOwnerOrAdmin(resource.data.userId);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.userId);
+    }
+
+    // Pest Reports collection
+    match /pestReports/{reportId} {
+      allow read: if isOwnerOrAdmin(resource.data.userId) || isExpert();
+      allow write: if isOwnerOrAdmin(resource.data.userId);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.userId);
+    }
+
+    // Disease Reports collection
+    match /diseaseReports/{reportId} {
+      allow read: if isOwnerOrAdmin(resource.data.userId) || isExpert();
+      allow write: if isOwnerOrAdmin(resource.data.userId);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.userId);
+    }
+
+    // Treatment Plans collection (public read, expert/admin write)
+    match /treatmentPlans/{planId} {
+      allow read: if isAuthenticated();
+      allow write: if isExpert() || isAdmin();
+    }
+
+    // Inventory Items collection
+    match /inventoryItems/{itemId} {
+      allow read, write: if isOwnerOrAdmin(resource.data.userId);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.userId);
+    }
+
+    // Inventory Transactions collection
+    match /inventoryTransactions/{transactionId} {
+      allow read, write: if isAuthenticated() && (
+        isOwner(get(/databases/$(database)/documents/inventoryItems/$(resource.data.itemId)).data.userId) ||
+        isAdmin()
+      );
+    }
+
+    // Suppliers collection (public read, admin write)
+    match /suppliers/{supplierId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Fertilizations collection
+    match /fertilizations/{fertilizationId} {
+      allow read, write: if isAuthenticated() && (
+        isOwner(get(/databases/$(database)/documents/farms/$(get(/databases/$(database)/documents/farmFields/$(resource.data.fieldId)).data.farmId)).data.userId) ||
+        isAdmin()
+      );
+    }
+
+    // Irrigation Logs collection
+    match /irrigationLogs/{logId} {
+      allow read, write: if isAuthenticated() && (
+        isOwner(get(/databases/$(database)/documents/farms/$(get(/databases/$(database)/documents/farmFields/$(resource.data.fieldId)).data.farmId)).data.userId) ||
+        isAdmin()
+      );
+    }
+
+    // Irrigation Schedules collection (public read for reference)
+    match /irrigationSchedules/{scheduleId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Equipment collection
+    match /equipment/{equipmentId} {
+      allow read, write: if isOwnerOrAdmin(resource.data.userId);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.userId);
+    }
+
+    // Maintenance Logs collection
+    match /maintenanceLogs/{logId} {
+      allow read, write: if isAuthenticated() && (
+        isOwner(get(/databases/$(database)/documents/equipment/$(resource.data.equipmentId)).data.userId) ||
+        isAdmin()
+      );
+    }
+
+    // Equipment Usage collection
+    match /equipmentUsage/{usageId} {
+      allow read, write: if isAuthenticated() && (
+        isOwner(get(/databases/$(database)/documents/equipment/$(resource.data.equipmentId)).data.userId) ||
+        isAdmin()
+      );
+    }
+
+    // Transactions collection
+    match /transactions/{transactionId} {
+      allow read, write: if isOwnerOrAdmin(resource.data.userId);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.userId);
+    }
+
+    // Budgets collection
+    match /budgets/{budgetId} {
+      allow read, write: if isAuthenticated(); // Users can create shared budgets
+    }
+
+    // Market Prices collection (public read, admin write)
+    match /marketPrices/{priceId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin();
+    }
+
+    // Sales collection
+    match /sales/{saleId} {
+      allow read, write: if isAuthenticated(); // Sales can be public for market transparency
+    }
+
+    // Consultations collection
+    match /consultations/{consultationId} {
+      allow read, write: if isOwnerOrAdmin(resource.data.userId) || 
+                         (isExpert() && resource.data.expertId == request.auth.uid);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.userId);
+    }
+
+    // Consultation Messages collection
+    match /consultationMessages/{messageId} {
+      allow read, write: if isAuthenticated() && (
+        isOwner(get(/databases/$(database)/documents/consultations/$(resource.data.consultationId)).data.userId) ||
+        (isExpert() && get(/databases/$(database)/documents/consultations/$(resource.data.consultationId)).data.expertId == request.auth.uid) ||
+        isAdmin()
+      );
+    }
+
+    // Yield Predictions collection
+    match /yieldPredictions/{predictionId} {
+      allow read, write: if isAuthenticated() && (
+        isOwner(get(/databases/$(database)/documents/farms/$(get(/databases/$(database)/documents/farmFields/$(resource.data.fieldId)).data.farmId)).data.userId) ||
+        isAdmin() ||
+        isExpert()
+      );
+    }
+
+    // Analytics collection
+    match /analytics/{analyticsId} {
+      allow read: if isAuthenticated();
+      allow write: if isAdmin(); // Only admin can write analytics
+    }
+
+    // Activities collection
+    match /activities/{activityId} {
+      allow read, write: if isOwnerOrAdmin(resource.data.userId);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.userId);
+    }
+
+    // Notifications collection
+    match /notifications/{notificationId} {
+      allow read, write: if isOwnerOrAdmin(resource.data.userId);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.userId);
+    }
+
+    // Subscriptions collection
+    match /subscriptions/{subscriptionId} {
+      allow read, write: if isOwnerOrAdmin(resource.data.userId);
+      allow create: if isAuthenticated() && isOwner(request.resource.data.userId);
+    }
+
+    // Marketplace Products collection
+    match /marketplace_products/{productId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isFarmer() && isOwner(request.resource.data.farmerId);
+      allow update: if isAuthenticated() && (
+        isOwner(resource.data.farmerId) || isAdmin()
+      );
+      allow delete: if isAuthenticated() && (
+        isOwner(resource.data.farmerId) || isAdmin()
+      );
+    }
+
+    // Marketplace Orders collection
+    match /marketplace_orders/{orderId} {
+      allow read: if isAuthenticated() && (
+        isOwner(resource.data.buyerId) || 
+        isOwner(resource.data.farmerId) || 
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && isOwner(request.resource.data.buyerId);
+      allow update: if isAuthenticated() && (
+        isOwner(resource.data.farmerId) || // Farmers can update order status
+        isOwner(resource.data.buyerId) ||   // Buyers can update delivery info
+        isAdmin()
+      );
+      allow delete: if isAdmin(); // Only admin can delete orders
+    }
+
+    // Marketplace Reviews collection
+    match /marketplace_reviews/{reviewId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isOwner(request.resource.data.buyerId);
+      allow update: if isAuthenticated() && (
+        isOwner(resource.data.buyerId) || isAdmin()
+      );
+      allow delete: if isAuthenticated() && (
+        isOwner(resource.data.buyerId) || isAdmin()
+      );
+    }
+
+    // Farmer Profiles collection (for marketplace)
+    match /farmer_profiles/{farmerId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isFarmer() && isOwner(farmerId);
+      allow update: if isAuthenticated() && (
+        isOwner(farmerId) || isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Buyer Profiles collection (for marketplace)
+    match /buyer_profiles/{buyerId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated() && isOwner(buyerId);
+      allow update: if isAuthenticated() && (
+        isOwner(buyerId) || isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Default deny all other documents
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
