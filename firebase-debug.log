@@ -1,0 +1,141 @@
+[debug] [2026-01-24T06:29:32.576Z] ----------------------------------------------------------------------
+[debug] [2026-01-24T06:29:32.580Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\RANJITH\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2026-01-24T06:29:32.581Z] CLI Version:   15.2.1
+[debug] [2026-01-24T06:29:32.581Z] Platform:      win32
+[debug] [2026-01-24T06:29:32.581Z] Node Version:  v24.8.0
+[debug] [2026-01-24T06:29:32.581Z] Time:          Sat Jan 24 2026 11:59:32 GMT+0530 (India Standard Time)
+[debug] [2026-01-24T06:29:32.581Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-01-24T06:29:35.025Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-01-24T06:29:35.026Z] > authorizing via signed-in user (ranjithloganathan2006@gmail.com)
+[debug] [2026-01-24T06:29:35.026Z] [iam] checking project agriassest-ai for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-01-24T06:29:35.027Z] Checked if tokens are valid: false, expires at: 1769234844432
+[debug] [2026-01-24T06:29:35.027Z] Checked if tokens are valid: false, expires at: 1769234844432
+[debug] [2026-01-24T06:29:35.027Z] > refreshing access token with scopes: []
+[debug] [2026-01-24T06:29:35.029Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2026-01-24T06:29:35.029Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-01-24T06:29:35.740Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2026-01-24T06:29:35.740Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2026-01-24T06:29:35.755Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/agriassest-ai:testIamPermissions [none]
+[debug] [2026-01-24T06:29:35.755Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/agriassest-ai:testIamPermissions x-goog-quota-user=projects/agriassest-ai
+[debug] [2026-01-24T06:29:35.755Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/agriassest-ai:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-01-24T06:29:37.400Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/agriassest-ai:testIamPermissions 200
+[debug] [2026-01-24T06:29:37.400Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/agriassest-ai:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-01-24T06:29:37.402Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:29:37.403Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:29:37.404Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/agriassest-ai [none]
+[debug] [2026-01-24T06:29:38.627Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/agriassest-ai 200
+[debug] [2026-01-24T06:29:38.627Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/agriassest-ai {"projectId":"agriassest-ai","projectNumber":"181428570215","displayName":"agriassest AI","name":"projects/agriassest-ai","resources":{"hostingSite":"agriassest-ai"},"state":"ACTIVE","etag":"1_8d3dd6c3-52a1-4ab8-b461-90aef2a40050"}
+[info] 
+[info] === Deploying to 'agriassest-ai'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2026-01-24T06:29:38.644Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:29:38.644Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:29:38.645Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/agriassest-ai/versions [none]
+[debug] [2026-01-24T06:29:38.645Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/agriassest-ai/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2026-01-24T06:29:40.985Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/agriassest-ai/versions 200
+[debug] [2026-01-24T06:29:40.985Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/agriassest-ai/versions {"name":"projects/181428570215/sites/agriassest-ai/versions/01faac301a092043","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[agriassest-ai]: beginning deploy... 
+[info] i  hosting[agriassest-ai]: found 6 files in dist 
+[debug] [2026-01-24T06:30:00.135Z] [hosting] uploading with 200 concurrency
+[debug] [2026-01-24T06:30:00.235Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:30:00.235Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:30:00.236Z] [hosting] hash cache [ZGlzdA] stored for 6 files
+[debug] [2026-01-24T06:30:00.236Z] [hosting][hash queue][FINAL] {"max":83,"min":20,"avg":39.833333333333336,"active":0,"complete":6,"success":6,"errored":0,"retried":0,"total":6,"elapsed":88}
+[debug] [2026-01-24T06:30:00.237Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/181428570215/sites/agriassest-ai/versions/01faac301a092043:populateFiles [none]
+[debug] [2026-01-24T06:30:00.237Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/181428570215/sites/agriassest-ai/versions/01faac301a092043:populateFiles {"files":{"/index.html":"e149ce0c9f3ad5b3414a8e1903a43c256bc4753a003db154a3f2fd4d31e7c47b","/assets/ui-vendor-BVJyte6f.js":"8e07fd4a2c517eaaf9d93e0eebf818ccb8778ed73dc186f5387e27922e4c768b","/assets/index-DEzUCBv3.css":"a77f865913a5378dafd3668fc300a470fe2742041fb0b3643674cb433f3dfc0f","/assets/react-vendor-DzThU3QL.js":"42d8410fd5c55b83e933c84201cff00074cf9e6b40e9385ac93877d6f175099b","/assets/firebase-fvEDrbZw.js":"8f8f318913bbc70c95a6a56ef157a742aebf7f5f3916a4463a2c58d48cea32b7","/assets/index-DAYSUbEx.js":"6baedbc5ad322dd595acc519f3cc61a3190bde543e6e739f23cb37d95c8b6cfc"}}
+[debug] [2026-01-24T06:30:01.592Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/181428570215/sites/agriassest-ai/versions/01faac301a092043:populateFiles 200
+[debug] [2026-01-24T06:30:01.592Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/181428570215/sites/agriassest-ai/versions/01faac301a092043:populateFiles {"uploadRequiredHashes":["a77f865913a5378dafd3668fc300a470fe2742041fb0b3643674cb433f3dfc0f","6baedbc5ad322dd595acc519f3cc61a3190bde543e6e739f23cb37d95c8b6cfc","e149ce0c9f3ad5b3414a8e1903a43c256bc4753a003db154a3f2fd4d31e7c47b"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/agriassest-ai/versions/01faac301a092043/files"}
+[debug] [2026-01-24T06:30:01.594Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:30:01.594Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:30:01.595Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:30:01.595Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:30:01.595Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:30:01.596Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:30:01.596Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/agriassest-ai/versions/01faac301a092043/files/a77f865913a5378dafd3668fc300a470fe2742041fb0b3643674cb433f3dfc0f [none]
+[debug] [2026-01-24T06:30:01.596Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/agriassest-ai/versions/01faac301a092043/files/a77f865913a5378dafd3668fc300a470fe2742041fb0b3643674cb433f3dfc0f [stream]
+[debug] [2026-01-24T06:30:01.599Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/agriassest-ai/versions/01faac301a092043/files/6baedbc5ad322dd595acc519f3cc61a3190bde543e6e739f23cb37d95c8b6cfc [none]
+[debug] [2026-01-24T06:30:01.599Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/agriassest-ai/versions/01faac301a092043/files/6baedbc5ad322dd595acc519f3cc61a3190bde543e6e739f23cb37d95c8b6cfc [stream]
+[debug] [2026-01-24T06:30:01.601Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/agriassest-ai/versions/01faac301a092043/files/e149ce0c9f3ad5b3414a8e1903a43c256bc4753a003db154a3f2fd4d31e7c47b [none]
+[debug] [2026-01-24T06:30:01.602Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/agriassest-ai/versions/01faac301a092043/files/e149ce0c9f3ad5b3414a8e1903a43c256bc4753a003db154a3f2fd4d31e7c47b [stream]
+[debug] [2026-01-24T06:30:01.604Z] [hosting][populate queue][FINAL] {"max":1361,"min":1361,"avg":1361,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":1369}
+[debug] [2026-01-24T06:30:01.605Z] [hosting] uploads queued: 3
+[debug] [2026-01-24T06:30:04.137Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/agriassest-ai/versions/01faac301a092043/files/a77f865913a5378dafd3668fc300a470fe2742041fb0b3643674cb433f3dfc0f 200
+[debug] [2026-01-24T06:30:04.138Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/agriassest-ai/versions/01faac301a092043/files/a77f865913a5378dafd3668fc300a470fe2742041fb0b3643674cb433f3dfc0f [stream]
+[debug] [2026-01-24T06:30:04.382Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/agriassest-ai/versions/01faac301a092043/files/e149ce0c9f3ad5b3414a8e1903a43c256bc4753a003db154a3f2fd4d31e7c47b 200
+[debug] [2026-01-24T06:30:04.383Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/agriassest-ai/versions/01faac301a092043/files/e149ce0c9f3ad5b3414a8e1903a43c256bc4753a003db154a3f2fd4d31e7c47b [stream]
+[debug] [2026-01-24T06:30:07.067Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/agriassest-ai/versions/01faac301a092043/files/6baedbc5ad322dd595acc519f3cc61a3190bde543e6e739f23cb37d95c8b6cfc 200
+[debug] [2026-01-24T06:30:07.067Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/agriassest-ai/versions/01faac301a092043/files/6baedbc5ad322dd595acc519f3cc61a3190bde543e6e739f23cb37d95c8b6cfc [stream]
+[debug] [2026-01-24T06:30:07.067Z] [hosting][upload queue][FINAL] {"max":5473,"min":2545,"avg":3602,"active":0,"complete":3,"success":3,"errored":0,"retried":0,"total":3,"elapsed":5474}
+[info] +  hosting[agriassest-ai]: file upload complete 
+[debug] [2026-01-24T06:30:07.068Z] [hosting] deploy completed after 6963ms
+[debug] [2026-01-24T06:30:07.068Z] [
+  {
+    "config": {
+      "public": "dist",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source": "**/*.@(js|css|woff|woff2|eot|ttf|otf)",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "max-age=31536000"
+            }
+          ]
+        },
+        {
+          "source": "**/*.@(html|json)",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "max-age=0"
+            }
+          ]
+        }
+      ],
+      "site": "agriassest-ai"
+    },
+    "version": "projects/181428570215/sites/agriassest-ai/versions/01faac301a092043"
+  }
+]
+[info] i  hosting[agriassest-ai]: finalizing version... 
+[debug] [2026-01-24T06:30:07.070Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:30:07.070Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:30:07.070Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/agriassest-ai/versions/01faac301a092043 updateMask=status%2Cconfig
+[debug] [2026-01-24T06:30:07.070Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/agriassest-ai/versions/01faac301a092043 {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}],"headers":[{"glob":"**/*.@(js|css|woff|woff2|eot|ttf|otf)","headers":{"Cache-Control":"max-age=31536000"}},{"glob":"**/*.@(html|json)","headers":{"Cache-Control":"max-age=0"}}]}}
+[debug] [2026-01-24T06:30:08.136Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/agriassest-ai/versions/01faac301a092043 200
+[debug] [2026-01-24T06:30:08.136Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/agriassest-ai/versions/01faac301a092043 {"name":"projects/181428570215/sites/agriassest-ai/versions/01faac301a092043","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"max-age=31536000"},"glob":"**/*.@(js|css|woff|woff2|eot|ttf|otf)"},{"headers":{"Cache-Control":"max-age=0"},"glob":"**/*.@(html|json)"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-01-24T06:29:40.097152Z","createUser":{"email":"ranjithloganathan2006@gmail.com"},"finalizeTime":"2026-01-24T06:30:07.589384Z","finalizeUser":{"email":"ranjithloganathan2006@gmail.com"}}
+[debug] [2026-01-24T06:30:08.136Z] [hosting] finalized version for agriassest-ai:[object Object]
+[info] +  hosting[agriassest-ai]: version finalized 
+[info] i  hosting[agriassest-ai]: releasing new version... 
+[debug] [2026-01-24T06:30:08.137Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:30:08.137Z] Checked if tokens are valid: true, expires at: 1769239774740
+[debug] [2026-01-24T06:30:08.137Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/agriassest-ai/channels/live/releases versionName=projects%2F181428570215%2Fsites%2Fagriassest-ai%2Fversions%2F01faac301a092043
+[debug] [2026-01-24T06:30:08.137Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/agriassest-ai/channels/live/releases {}
+[debug] [2026-01-24T06:30:08.518Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/agriassest-ai/channels/live/releases 200
+[debug] [2026-01-24T06:30:08.518Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/agriassest-ai/channels/live/releases {"name":"projects/181428570215/sites/agriassest-ai/channels/live/releases/1769236207421000","version":{"name":"projects/181428570215/sites/agriassest-ai/versions/01faac301a092043","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"max-age=31536000"},"glob":"**/*.@(js|css|woff|woff2|eot|ttf|otf)"},{"headers":{"Cache-Control":"max-age=0"},"glob":"**/*.@(html|json)"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-01-24T06:29:40.097152Z","createUser":{"email":"ranjithloganathan2006@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLvb1h7g7phzKfmhIfdptUvchOLG1zcd8iq-kDKdGjxQz_a6Du-"},"finalizeTime":"2026-01-24T06:30:07.589384Z","finalizeUser":{"email":"ranjithloganathan2006@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLvb1h7g7phzKfmhIfdptUvchOLG1zcd8iq-kDKdGjxQz_a6Du-"}},"type":"DEPLOY","releaseTime":"2026-01-24T06:30:07.421Z","releaseUser":{"email":"ranjithloganathan2006@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLvb1h7g7phzKfmhIfdptUvchOLG1zcd8iq-kDKdGjxQz_a6Du-"}}
+[debug] [2026-01-24T06:30:08.519Z] [hosting] release: {"name":"projects/181428570215/sites/agriassest-ai/channels/live/releases/1769236207421000","version":{"name":"projects/181428570215/sites/agriassest-ai/versions/01faac301a092043","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"max-age=31536000"},"glob":"**/*.@(js|css|woff|woff2|eot|ttf|otf)"},{"headers":{"Cache-Control":"max-age=0"},"glob":"**/*.@(html|json)"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-01-24T06:29:40.097152Z","createUser":{"email":"ranjithloganathan2006@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLvb1h7g7phzKfmhIfdptUvchOLG1zcd8iq-kDKdGjxQz_a6Du-"},"finalizeTime":"2026-01-24T06:30:07.589384Z","finalizeUser":{"email":"ranjithloganathan2006@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLvb1h7g7phzKfmhIfdptUvchOLG1zcd8iq-kDKdGjxQz_a6Du-"}},"type":"DEPLOY","releaseTime":"2026-01-24T06:30:07.421Z","releaseUser":{"email":"ranjithloganathan2006@gmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocLvb1h7g7phzKfmhIfdptUvchOLG1zcd8iq-kDKdGjxQz_a6Du-"}}
+[info] +  hosting[agriassest-ai]: release complete 
+[info] 
+[info] +  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/agriassest-ai/overview
+[info] Hosting URL: https://agriassest-ai.web.app
+[debug] [2026-01-24T06:30:18.549Z] Error: Timed out.
+    at Timeout._onTimeout (C:\Users\RANJITH\AppData\Roaming\npm\node_modules\firebase-tools\lib\utils.js:308:49)
+    at listOnTimeout (node:internal/timers:608:17)
+    at process.processTimers (node:internal/timers:543:7)
+[error] 
+[error] Error: An unexpected error has occurred.
