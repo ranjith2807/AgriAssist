@@ -11,22 +11,34 @@ service cloud.firestore {
       return request.auth.uid == userId;
     }
     
-    function isAdmin() {
+    function getUserRole() {
       return isAuthenticated() && 
-             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'ADMIN';
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) ?
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role : null;
+    }
+    
+    function isAdmin() {
+      return getUserRole() == 'admin';
     }
     
     function isExpert() {
-      return isAuthenticated() && 
-             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'EXPERT';
+      return getUserRole() == 'expert';
     }
     
     function isFarmer() {
-      return isAuthenticated() && 
-             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
-             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'FARMER';
+      return getUserRole() == 'farmer';
+    }
+    
+    function isBuyer() {
+      return getUserRole() == 'buyer';
+    }
+    
+    function hasRole(role) {
+      return getUserRole() == role;
+    }
+    
+    function hasAnyRole(roles) {
+      return getUserRole() in roles;
     }
     
     function isOwnerOrAdmin(userId) {
@@ -36,7 +48,7 @@ service cloud.firestore {
     // Users collection
     match /users/{userId} {
       allow read: if isOwnerOrAdmin(userId) || isExpert();
-      allow create: if isAuthenticated() && isOwner(userId);
+      allow create: if request.auth != null && request.auth.uid == userId; // Allow user to create their own profile
       allow update: if isOwnerOrAdmin(userId);
       allow delete: if isAdmin();
     }
@@ -283,7 +295,7 @@ service cloud.firestore {
         isOwner(resource.data.farmerId) || 
         isAdmin()
       );
-      allow create: if isAuthenticated() && isOwner(request.resource.data.buyerId);
+      allow create: if isAuthenticated() && isBuyer() && isOwner(request.resource.data.buyerId);
       allow update: if isAuthenticated() && (
         isOwner(resource.data.farmerId) || // Farmers can update order status
         isOwner(resource.data.buyerId) ||   // Buyers can update delivery info
@@ -295,13 +307,115 @@ service cloud.firestore {
     // Marketplace Reviews collection
     match /marketplace_reviews/{reviewId} {
       allow read: if isAuthenticated();
-      allow create: if isAuthenticated() && isOwner(request.resource.data.buyerId);
+      allow create: if isAuthenticated() && isBuyer() && isOwner(request.resource.data.buyerId);
       allow update: if isAuthenticated() && (
         isOwner(resource.data.buyerId) || isAdmin()
       );
       allow delete: if isAuthenticated() && (
         isOwner(resource.data.buyerId) || isAdmin()
       );
+    }
+
+    // Agricultural Data Collections (Farmer-specific)
+    match /plant_health/{healthId} {
+      allow read, write: if isAuthenticated() && (
+        isFarmer() && isOwner(resource.data.userId) ||
+        isExpert() || // Experts can view for consultation
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && isFarmer() && isOwner(request.resource.data.userId);
+    }
+
+    match /soil_analysis/{analysisId} {
+      allow read, write: if isAuthenticated() && (
+        isFarmer() && isOwner(resource.data.userId) ||
+        isExpert() || // Experts can view for consultation
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && isFarmer() && isOwner(request.resource.data.userId);
+    }
+
+    match /pest_identification/{pestId} {
+      allow read, write: if isAuthenticated() && (
+        isFarmer() && isOwner(resource.data.userId) ||
+        isExpert() || // Experts can view for consultation
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && isFarmer() && isOwner(request.resource.data.userId);
+    }
+
+    match /fertilizer_suggestions/{fertilizerId} {
+      allow read, write: if isAuthenticated() && (
+        isFarmer() && isOwner(resource.data.userId) ||
+        isExpert() || // Experts can view for consultation
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && isFarmer() && isOwner(request.resource.data.userId);
+    }
+
+    match /irrigation_scheduling/{irrigationId} {
+      allow read, write: if isAuthenticated() && (
+        isFarmer() && isOwner(resource.data.userId) ||
+        isExpert() || // Experts can view for consultation
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && isFarmer() && isOwner(request.resource.data.userId);
+    }
+
+    match /market_prices/{priceId} {
+      allow read: if isAuthenticated(); // All roles can read market prices
+      allow write: if isAdmin(); // Only admin can update market prices
+    }
+
+    match /weather_data/{weatherId} {
+      allow read: if isAuthenticated(); // All roles can read weather data
+      allow write: if isAdmin(); // Only admin can update weather data
+    }
+
+    match /crop_disease/{diseaseId} {
+      allow read, write: if isAuthenticated() && (
+        isFarmer() && isOwner(resource.data.userId) ||
+        isExpert() || // Experts can view for consultation
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && isFarmer() && isOwner(request.resource.data.userId);
+    }
+
+    // Expert Consultation Collections
+    match /expert_consultations/{consultationId} {
+      allow read, write: if isAuthenticated() && (
+        isOwner(resource.data.farmerId) || // Farmer who requested
+        isOwner(resource.data.expertId) ||  // Expert providing consultation
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && isFarmer() && isOwner(request.resource.data.farmerId);
+    }
+
+    match /consultation_messages/{messageId} {
+      allow read, write: if isAuthenticated() && (
+        isOwner(get(/databases/$(database)/documents/expert_consultations/$(resource.data.consultationId)).data.farmerId) ||
+        isOwner(get(/databases/$(database)/documents/expert_consultations/$(resource.data.consultationId)).data.expertId) ||
+        isAdmin()
+      );
+    }
+
+    // Farm Inventory (Farmer-specific)
+    match /farm_inventory/{inventoryId} {
+      allow read, write: if isAuthenticated() && (
+        isFarmer() && isOwner(resource.data.userId) ||
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && isFarmer() && isOwner(request.resource.data.userId);
+    }
+
+    // Yield Predictions (Farmer-specific, Expert can view)
+    match /yield_predictions/{predictionId} {
+      allow read, write: if isAuthenticated() && (
+        isFarmer() && isOwner(resource.data.userId) ||
+        isExpert() || // Experts can view for consultation
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && isFarmer() && isOwner(request.resource.data.userId);
     }
 
     // Farmer Profiles collection (for marketplace)
@@ -322,6 +436,13 @@ service cloud.firestore {
         isOwner(buyerId) || isAdmin()
       );
       allow delete: if isAdmin();
+    }
+
+    // Email OTP collection
+    match /email_otps/{email} {
+      allow read, write: if true; // Allow unauthenticated access for OTP verification during signup
+      allow create: if true; // Allow creation for new signups
+      allow delete: if true; // Allow cleanup of expired OTPs
     }
 
     // Default deny all other documents
