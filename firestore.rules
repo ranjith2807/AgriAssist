@@ -83,15 +83,6 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    // Crop Health collection
-    match /cropHealth/{healthId} {
-      allow read, write: if isAuthenticated() && (
-        isOwner(get(/databases/$(database)/documents/farms/$(get(/databases/$(database)/documents/farmFields/$(resource.data.fieldId)).data.farmId)).data.userId) ||
-        isAdmin() ||
-        isExpert()
-      );
-    }
-
     // Harvests collection
     match /harvests/{harvestId} {
       allow read, write: if isAuthenticated() && (
@@ -318,6 +309,16 @@ service cloud.firestore {
 
     // Agricultural Data Collections (Farmer-specific)
     match /plant_health/{healthId} {
+      allow read, write: if isAuthenticated() && (
+        isFarmer() && isOwner(resource.data.userId) ||
+        isExpert() || // Experts can view for consultation
+        isAdmin()
+      );
+      allow create: if isAuthenticated() && isFarmer() && isOwner(request.resource.data.userId);
+    }
+
+    // Crop Health collection (updated to support direct user association)
+    match /cropHealth/{healthId} {
       allow read, write: if isAuthenticated() && (
         isFarmer() && isOwner(resource.data.userId) ||
         isExpert() || // Experts can view for consultation

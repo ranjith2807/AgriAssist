@@ -57,6 +57,20 @@
       ]
     },
     {
+      "collectionGroup": "cropHealth",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "userId",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "checkDate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
       "collectionGroup": "soilAnalysis",
       "queryScope": "COLLECTION",
       "fields": [

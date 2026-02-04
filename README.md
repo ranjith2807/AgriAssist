@@ -130,10 +130,17 @@ See [`docs/README.md`](docs/README.md) for the complete documentation structure 
 
 ## 🛠️ Development Tools
 
+### **Project Planning & Design**
+- **Idea to Design Generator** - Convert natural language project ideas into structured requirements and design documents
+  - **CLI Tool**: `tools/scripts/idea-to-design-generator.js` - Interactive command-line generator
+  - **Web Interface**: `/idea-to-design` - User-friendly web-based wizard
+  - **Documentation**: `docs/workflow/idea-to-design-flow.md` - Complete methodology guide
+
 ### **Automation Scripts** (`tools/scripts/`)
 - `setup-firebase.js` - Firebase configuration automation
 - `deploy.js` - Deployment automation
 - `verify-auth-config.js` - Authentication verification
+- `idea-to-design-generator.js` - Requirements and design document generator
 
 ### **Testing Tools** (`tools/testing/`)
 - Various HTML testing interfaces for different features
